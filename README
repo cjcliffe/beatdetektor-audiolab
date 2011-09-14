@@ -1,0 +1,11 @@
+Desktop application for the BeatDetektor library using OpenAL, OpenGL and possibly wxWidgets.
+
+Platform targets are Linux and OSX.
+
+The goal is to provide a testbed for experimenting with the algorithm's internals and attempting to target and enhance the specific statistical frequency onset phenomenon that allows it to work.
+
+The application will attempt to integrate simple real-time controls for beatdetektor and configuration of audio filters with dynamic controls and visualization of data output via OpenGL.
+
+In addition to real-time utilization it would be ideal to have an offline buffer and analysis option for automation, this application will explore adapting a buffered approach that will allow additional layers of processing and accuracy.
+
+
