@@ -1,0 +1,311 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		312F23D410B625AF005D2384 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 312F23D210B625AF005D2384 /* Timer.cpp */; };
+		313F83371147548A00AE3A9A /* BeatDetektor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 313F83341147548A00AE3A9A /* BeatDetektor.cpp */; };
+		31AA713A1229D84700B4A70B /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31AA71361229D84700B4A70B /* Bitmap.cpp */; };
+		31AA713B1229D84700B4A70B /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31AA71381229D84700B4A70B /* Font.cpp */; };
+		31AA71791229D9D600B4A70B /* bit_font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31AA71781229D9D600B4A70B /* bit_font.cpp */; };
+		31C9CC650EB4073C000B6A9E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31C9CC610EB4073C000B6A9E /* CoreServices.framework */; };
+		31C9CC660EB4073C000B6A9E /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31C9CC620EB4073C000B6A9E /* GLUT.framework */; };
+		31C9CC670EB4073C000B6A9E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31C9CC630EB4073C000B6A9E /* OpenAL.framework */; };
+		31C9CC680EB4073C000B6A9E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31C9CC640EB4073C000B6A9E /* OpenGL.framework */; };
+		8DD76F650486A84900D96B5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		31C9D06D0EB424C1000B6A9E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		312F23D210B625AF005D2384 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
+		312F23D310B625AF005D2384 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
+		312F249710B73DA1005D2384 /* FFT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFT.h; sourceTree = "<group>"; };
+		313AC40710BE2971002ACF1C /* bit_font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bit_font.h; sourceTree = "<group>"; };
+		313F83341147548A00AE3A9A /* BeatDetektor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeatDetektor.cpp; sourceTree = "<group>"; };
+		313F83351147548A00AE3A9A /* BeatDetektor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeatDetektor.h; sourceTree = "<group>"; };
+		313F83361147548A00AE3A9A /* LICENSE.TXT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.TXT; sourceTree = "<group>"; };
+		31AA71361229D84700B4A70B /* Bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bitmap.cpp; sourceTree = "<group>"; };
+		31AA71371229D84700B4A70B /* Bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bitmap.h; sourceTree = "<group>"; };
+		31AA71381229D84700B4A70B /* Font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Font.cpp; sourceTree = "<group>"; };
+		31AA71391229D84700B4A70B /* Font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Font.h; sourceTree = "<group>"; };
+		31AA71781229D9D600B4A70B /* bit_font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bit_font.cpp; sourceTree = "<group>"; };
+		31C9CC610EB4073C000B6A9E /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		31C9CC620EB4073C000B6A9E /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
+		31C9CC630EB4073C000B6A9E /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = /System/Library/Frameworks/OpenAL.framework; sourceTree = "<absolute>"; };
+		31C9CC640EB4073C000B6A9E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		8DD76F6C0486A84900D96B5E /* BeatDetektor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BeatDetektor; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6859E8B029090EE04C91782 /* OpenALTest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = OpenALTest.1; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DD76F660486A84900D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31C9CC680EB4073C000B6A9E /* OpenGL.framework in Frameworks */,
+				31C9CC650EB4073C000B6A9E /* CoreServices.framework in Frameworks */,
+				31C9CC660EB4073C000B6A9E /* GLUT.framework in Frameworks */,
+				31C9CC670EB4073C000B6A9E /* OpenAL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* OpenALTest */ = {
+			isa = PBXGroup;
+			children = (
+				31C9CC610EB4073C000B6A9E /* CoreServices.framework */,
+				31C9CC620EB4073C000B6A9E /* GLUT.framework */,
+				31C9CC630EB4073C000B6A9E /* OpenAL.framework */,
+				31C9CC640EB4073C000B6A9E /* OpenGL.framework */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6859E8C029090F304C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = OpenALTest;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				313F83331147548A00AE3A9A /* core */,
+				08FB7796FE84155DC02AAC07 /* main.cpp */,
+				312F23D210B625AF005D2384 /* Timer.cpp */,
+				312F23D310B625AF005D2384 /* Timer.h */,
+				312F249710B73DA1005D2384 /* FFT.h */,
+				313AC40710BE2971002ACF1C /* bit_font.h */,
+				31AA71361229D84700B4A70B /* Bitmap.cpp */,
+				31AA71371229D84700B4A70B /* Bitmap.h */,
+				31AA71381229D84700B4A70B /* Font.cpp */,
+				31AA71391229D84700B4A70B /* Font.h */,
+				31AA71781229D9D600B4A70B /* bit_font.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DD76F6C0486A84900D96B5E /* BeatDetektor */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		313F83331147548A00AE3A9A /* core */ = {
+			isa = PBXGroup;
+			children = (
+				313F83341147548A00AE3A9A /* BeatDetektor.cpp */,
+				313F83351147548A00AE3A9A /* BeatDetektor.h */,
+				313F83361147548A00AE3A9A /* LICENSE.TXT */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		C6859E8C029090F304C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				C6859E8B029090EE04C91782 /* OpenALTest.1 */,
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8DD76F620486A84900D96B5E /* BeatDetektor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "BeatDetektor" */;
+			buildPhases = (
+				8DD76F640486A84900D96B5E /* Sources */,
+				8DD76F660486A84900D96B5E /* Frameworks */,
+				31C9D06D0EB424C1000B6A9E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BeatDetektor;
+			productInstallPath = "$(HOME)/bin";
+			productName = OpenALTest;
+			productReference = 8DD76F6C0486A84900D96B5E /* BeatDetektor */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+			};
+			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "test_app" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 08FB7794FE84155DC02AAC07 /* OpenALTest */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DD76F620486A84900D96B5E /* BeatDetektor */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DD76F640486A84900D96B5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
+				312F23D410B625AF005D2384 /* Timer.cpp in Sources */,
+				313F83371147548A00AE3A9A /* BeatDetektor.cpp in Sources */,
+				31AA713A1229D84700B4A70B /* Bitmap.cpp in Sources */,
+				31AA713B1229D84700B4A70B /* Font.cpp in Sources */,
+				31AA71791229D9D600B4A70B /* bit_font.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB923208733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_GLIBCXX_DEBUG=1",
+					"_GLIBCXX_DEBUG_PEDANTIC=1",
+				);
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = BeatDetektor;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Debug;
+		};
+		1DEB923608733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				FRAMEWORK_SEARCH_PATHS = ../cubicvr/include/;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = 4.0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../dependencies/product/include/bullet/,
+					../cubicvr/include/,
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Debug;
+		};
+		319540380EBBBC990048FD84 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				FRAMEWORK_SEARCH_PATHS = ../cubicvr/include/;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = 4.0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../dependencies/product/include/bullet/,
+					../cubicvr/include/,
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
+		319540390EBBBC990048FD84 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_GLIBCXX_DEBUG=1",
+					"_GLIBCXX_DEBUG_PEDANTIC=1",
+				);
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = BeatDetektor;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "BeatDetektor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923208733DC60010E9CD /* Debug */,
+				319540390EBBBC990048FD84 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "test_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923608733DC60010E9CD /* Debug */,
+				319540380EBBBC990048FD84 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
