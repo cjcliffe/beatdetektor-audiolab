@@ -9,3 +9,4 @@ The application will attempt to integrate simple real-time controls for beatdete
 In addition to real-time utilization it would be ideal to have an offline buffer and analysis option for automation, this application will explore adapting a buffered approach that will allow additional layers of processing and accuracy.
 
 
+Initial test application currently in repository requires OSX and a line-input, microphone or a simple audio re-routing applicatino such as SoundFlower (http://code.google.com/p/soundflower/)
