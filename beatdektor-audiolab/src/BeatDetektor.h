@@ -1,30 +1,37 @@
 #pragma once
 
 /*
- *  BeatDetektor.h
+ * BeatDetektor.h
  *
- *  BeatDetektor - CubicFX Visualizer Beat Detection & Analysis Algorithm
+ * BeatDetektor - CubicFX Visualizer Beat Detection & Analysis Algorithm
  *
- *  Created by Charles J. Cliffe on 09-11-30.
- *  Copyright 2009 Charles J. Cliffe. All rights reserved.
+ * Copyright (c) 2009 Charles J. Cliffe.
  *
- *  BeatDetektor is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * BeatDetektor is distributed under the terms of the MIT License.
+ * http://opensource.org/licenses/MIT
  *
- *  BeatDetektor is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- *  Please contact cj@cubicproductions.com if you seek alternate
- *  licensing terms for your project.
- *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
  */
+
+
+#define DEVTEST_BUILD  1
+#include <string>
 
 
 /* 
@@ -97,7 +104,6 @@
 #include <vector>
 #include <math.h>
 
-/* Original recipe
 #define BD_DETECTION_RANGES 128
 #define BD_DETECTION_RATE 12.0
 #define BD_DETECTION_FACTOR 0.925
@@ -108,33 +114,6 @@
 #define BD_QUALITY_STEP 0.1
 #define BD_FINISH_LINE 60.0
 #define BD_MINIMUM_CONTRIBUTIONS 6
-*/
-
-
-/*#define BD_DETECTION_RANGES 128
-#define BD_DETECTION_RATE 6.0
-#define BD_DETECTION_FACTOR 0.92
-
-#define BD_QUALITY_TOLERANCE 0.95
-#define BD_QUALITY_DECAY 0.95
-#define BD_QUALITY_REWARD 20.0
-#define BD_QUALITY_STEP 0.075
-#define BD_FINISH_LINE 200.0
-#define BD_MINIMUM_CONTRIBUTIONS 4
-*/
-
-#define BD_DETECTION_RANGES 128
-#define BD_DETECTION_RATE 12.0
-#define BD_DETECTION_FACTOR 0.925
-
-#define BD_QUALITY_TOLERANCE 0.96
-#define BD_QUALITY_DECAY 0.95
-#define BD_QUALITY_REWARD 7.0
-#define BD_QUALITY_STEP 0.1
-#define BD_FINISH_LINE 60.0
-#define BD_MINIMUM_CONTRIBUTIONS 6
-
-
 
 class BeatDetektor
 {
@@ -145,6 +124,12 @@ public:
 	BeatDetektor *src;
 	
 	float current_bpm; 
+	float winning_bpm; 
+	float winning_bpm_lo; 
+	float win_val;
+	int win_bpm_int;
+	float win_val_lo;
+	int win_bpm_int_lo;
 	
 	float bpm_predict;
 	
@@ -154,13 +139,13 @@ public:
 	float last_update;
 	float total_time;
 	
-	std::map<int,float> draft;
-	std::map<int,float> fract_draft;
-
-	
+	float bpm_timer;
+	int beat_counter;
+	int half_counter;
+	int quarter_counter;
 	float detection_factor;
 	//	float quality_minimum,
-	float quality_reward,quality_decay,detection_rate;
+	float quality_reward,quality_decay,detection_rate,finish_line;
 	int minimum_contributions;
 	float quality_total, quality_avg, ma_quality_lo, ma_quality_total, ma_quality_avg, maa_quality_avg;
 	
@@ -184,14 +169,22 @@ public:
 	// current trigger state for range n
 	bool detection[BD_DETECTION_RANGES]; 
 	
+	std::map<int,float> bpm_contest;	// 1/10th
+	std::map<int,float> bpm_contest_lo; // 1/1
+	
 #if DEVTEST_BUILD
 	bool debugmode;
 	std::map<int,int> contribution_counter;
 #endif	
 	
-	BeatDetektor(float BPM_MIN_in=100.0,float BPM_MAX_in=200.0, BeatDetektor *link_src = NULL) :
+	BeatDetektor(float BPM_MIN_in=100.0,float BPM_MAX_in=200.0, BeatDetektor *link_src = 0) :
 	
 	current_bpm(0.0),
+	winning_bpm(0.0), 
+	win_val(0.0),
+	win_bpm_int(0),
+	win_val_lo(0.0),
+	win_bpm_int_lo(0),
 	
 	bpm_predict(0),
 	
@@ -200,12 +193,17 @@ public:
 	last_timer(0.0),
 	last_update(0.0),
 	total_time(0.0),
-
+	
+	bpm_timer(0.0),
+	beat_counter(0),
+	half_counter(0),
+	quarter_counter(0),
 	src(link_src),
 	
 	//	quality_minimum(BD_QUALITY_MINIMUM),
 	quality_reward(BD_QUALITY_REWARD),
 	detection_rate(BD_DETECTION_RATE),
+	finish_line(BD_FINISH_LINE),
 	minimum_contributions(BD_MINIMUM_CONTRIBUTIONS),
 	detection_factor(BD_DETECTION_FACTOR),
 	quality_total(1.0),
@@ -215,7 +213,7 @@ public:
 	ma_quality_lo(1.0),
 	ma_quality_total(1.0)
 #if DEVTEST_BUILD
-	,debugmode(false)
+	,debugmode(true)
 #endif	
 	
 	{
@@ -236,81 +234,19 @@ public:
 			}
 			last_detection[i] = 0;
 			detection_quality[i] = 0;
-			detection[i] = false;			
+			detection[i] = false;
+			
 		}
 		
 		total_time = 0;
 		maa_quality_avg = 500.0;
-		current_bpm = bpm_offset = last_update = last_timer = 0;
+		bpm_offset = bpm_timer = last_update = last_timer = winning_bpm = current_bpm = win_val = win_bpm_int = 0;
+		bpm_contest.clear();
+		bpm_contest_lo.clear();
 #if DEVTEST_BUILD
 		contribution_counter.clear();
 #endif
 	}
 	
 	void process(float timer_seconds, std::vector<float> &fft_data);
-};
-
-
-class BeatDetektorContest 
-{
-public:
-	float winning_bpm; 
-	float winning_bpm_lo; 
-	float win_val;
-	int win_bpm_int;
-	float win_val_lo;
-	int win_bpm_int_lo;
-	bool no_contest_decay;
-	float bpm_timer;
-	int beat_counter;
-	int half_counter;
-	int quarter_counter;
-	float finish_line;
-	float last_timer;
-	float last_update;
-	bool has_current_bpm;
-
-	std::map<int,float> bpm_contest;	// 1/10th
-	std::map<int,float> bpm_contest_lo; // 1/1
-	
-	
-	BeatDetektorContest() :
-	win_val(0.0),
-	win_bpm_int(0),
-	win_val_lo(0.0),
-	win_bpm_int_lo(0),
-	no_contest_decay(false),
-	bpm_timer(0.0),
-	beat_counter(0),
-	half_counter(0),
-	quarter_counter(0),
-	winning_bpm(0.0),
-	has_current_bpm(false),
-	finish_line(BD_FINISH_LINE)
-	{
-		reset();
-	}
-	
-	void reset()
-	{
-		last_timer = last_update = win_val = win_bpm_int = winning_bpm = bpm_timer = 0;	
-		bpm_contest.clear();
-		bpm_contest_lo.clear();
-	}
-		
-	void process(float timer_seconds, BeatDetektor *bd);
-	void run();
-};
-
-class BeatDetektorVU
-{
-public:
-	float vu_levels[BD_DETECTION_RANGES];
-	
-	BeatDetektorVU()
-	{		
-		for (int i = 0; i < BD_DETECTION_RANGES; i++) vu_levels[i] = 0.0;		
-	}
-	
-	void process(BeatDetektor *detector, float current_bpm);	
 };

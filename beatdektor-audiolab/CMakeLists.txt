@@ -1,0 +1,77 @@
+cmake_minimum_required (VERSION 2.6)
+
+macro(configure_files srcDir destDir)
+    message(STATUS "Configuring directory ${destDir}")
+    make_directory(${destDir})
+
+    file(GLOB templateFiles RELATIVE ${srcDir} ${srcDir}/*)
+    foreach(templateFile ${templateFiles})
+        set(srcTemplatePath ${srcDir}/${templateFile})
+        if(NOT IS_DIRECTORY ${srcTemplatePath})
+#            message(STATUS "Configuring file ${templateFile}")
+            configure_file(
+                    ${srcTemplatePath}
+                    ${destDir}/${templateFile}
+                    COPYONLY)
+        endif(NOT IS_DIRECTORY ${srcTemplatePath})
+    endforeach(templateFile)
+endmacro(configure_files)
+
+
+macro(configure_files_recurse srcDir destDir)
+    message(STATUS "Configuring directory ${destDir}")
+    make_directory(${destDir})
+
+    file(GLOB_RECURSE templateFiles RELATIVE ${srcDir} ${srcDir}/*)
+    foreach(templateFile ${templateFiles})
+        set(srcTemplatePath ${srcDir}/${templateFile})
+        if(NOT IS_DIRECTORY ${srcTemplatePath})
+#            message(STATUS "Configuring file ${templateFile}")
+            configure_file(
+                    ${srcTemplatePath}
+                    ${destDir}/${templateFile}
+                    COPYONLY)
+        endif(NOT IS_DIRECTORY ${srcTemplatePath})
+    endforeach(templateFile)
+endmacro(configure_files_recurse)
+
+project (BeatDetektorAudiolab)
+SET(CMAKE_CXX_FLAGS "-m64") 
+
+SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${PROJECT_BINARY_DIR})
+SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_BINARY_DIR})
+
+#add_subdirectory(${PROJECT_SOURCE_DIR}/glfw-3.0.3 ${PROJECT_BINARY_DIR}/glfw/)
+#include_directories(${PROJECT_SOURCE_DIR}/glfw-3.0.3/include)
+#include_directories ( ${PROJECT_SOURCE_DIR}/../CubicVR-2/build/include )
+#link_directories ( ${PROJECT_SOURCE_DIR}/../CubicVR-2/build/lib )
+
+IF (DEFINED WIN32)
+	include_directories ( ${PROJECT_SOURCE_DIR}/extern/OpenAL-soft-1.15.1/include/ )
+	link_directories ( ${PROJECT_SOURCE_DIR}/extern/OpenAL-soft-1.15.1/lib/Win64/ )
+	SET (OPENAL_LIBRARY libOpenAL32 winmm)
+ELSE (DEFINED WIN32)
+	find_package (OpenAL)
+ENDIF (DEFINED WIN32)
+
+SET (audiolab_sources
+    src/main.cpp
+    src/Timer.cpp
+    src/BeatDetektor.cpp
+)
+
+SET (audiolab_headers
+	src/FFT.h
+    src/Timer.h
+	src/BeatDetektor.h
+)
+
+#configure_files(${PROJECT_SOURCE_DIR}/shaders ${PROJECT_BINARY_DIR}/shaders COPYONLY)
+
+add_executable(AudioLab ${audiolab_sources} ${audiolab_headers})
+
+target_link_libraries(AudioLab ${OPENAL_LIBRARY})
+
+
+

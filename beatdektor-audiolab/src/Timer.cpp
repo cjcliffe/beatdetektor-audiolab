@@ -23,10 +23,6 @@
 
 #include "Timer.h"
 
-#ifdef _WIN32
-	#include <mmsystem.h>
-#endif
-
 Timer::Timer(void) : time_elapsed(0), system_milliseconds(0), start_time(0), end_time(0), last_update(0), paused_time(0), offset(0), paused_state(false)
 {
 }
@@ -97,7 +93,7 @@ void Timer::update(void)
 	}
 	else
 	{
-#ifdef _WIN32
+#ifdef timeGetTime
 		system_milliseconds = timeGetTime ();
 #else
 		gettimeofday(&time_val,&time_zone);

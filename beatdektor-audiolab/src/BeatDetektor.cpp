@@ -4,26 +4,32 @@
  *
  *  BeatDetektor - CubicFX Visualizer Beat Detection & Analysis Algorithm
  *
- *  Created by Charles J. Cliffe on 09-11-30.
- *  Copyright 2009 Charles J. Cliffe. All rights reserved.
+ * Copyright (c) 2009 Charles J. Cliffe.
  *
- *  BeatDetektor is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * BeatDetektor is distributed under the terms of the MIT License.
+ * http://opensource.org/licenses/MIT
  *
- *  BeatDetektor is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- *  Please contact cj@cubicproductions.com if you seek alternate
- *  licensing terms for your project.
- *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
  */
+
+
+
 
 
 #include "BeatDetektor.h"
@@ -101,9 +107,9 @@ void BeatDetektor::process(float timer_seconds, std::vector<float> &fft_data)
 			// calculate length of gap (since start of last trigger)
 			float trigger_gap = timestamp-last_detection[range];
 			
-#define REWARD_VALS 8
-			float reward_tolerances[REWARD_VALS] = { 0.001, 0.005, 0.01, 0.02, 0.04, 0.08, 0.1, 0.2  };  
-			float reward_multipliers[REWARD_VALS] = { 20.0, 10.0, 5.0, 1.0, 1.0/4.0, 1.0/8.0, 1.0/32.0, 1.0/64.0 };
+#define REWARD_VALS 7
+			float reward_tolerances[REWARD_VALS] = { 0.001, 0.005, 0.01, 0.02, 0.04, 0.08, 0.10  };  
+			float reward_multipliers[REWARD_VALS] = { 20.0, 10.0, 8.0, 1.0, 1.0/2.0, 1.0/4.0, 1.0/8.0 };
 			
 			// trigger falls within acceptable range, 
 			if (trigger_gap < bpm_ceil && trigger_gap > (bpm_floor))
@@ -156,10 +162,10 @@ void BeatDetektor::process(float timer_seconds, std::vector<float> &fft_data)
 			
 			
 			float qmp = (detection_quality[range]/quality_avg)*BD_QUALITY_STEP;
-//			if (qmp > 1.0)
-//			{
-//				qmp = 1.0;
-//			}
+			if (qmp > 1.0)
+			{
+				qmp = 1.0;
+			}
 			
 			if (rewarded)
 			{
@@ -179,8 +185,8 @@ void BeatDetektor::process(float timer_seconds, std::vector<float> &fft_data)
 			{
 				if (detection_quality[range] < quality_avg*BD_QUALITY_TOLERANCE && current_bpm)
 				{
-					ma_bpm_range[range] -= (ma_bpm_range[range]-current_bpm) * 0.25;
-					maa_bpm_range[range] -= (maa_bpm_range[range]-ma_bpm_range[range]) * 0.25;
+					ma_bpm_range[range] -= (ma_bpm_range[range]-current_bpm) * 0.5;
+					maa_bpm_range[range] -= (maa_bpm_range[range]-ma_bpm_range[range]) * 0.5;
 				}
 				detection_quality[range] -= quality_reward*BD_QUALITY_STEP;
 			}
@@ -223,15 +229,15 @@ void BeatDetektor::process(float timer_seconds, std::vector<float> &fft_data)
 	maa_quality_avg += (ma_quality_avg - maa_quality_avg) * last_update;
 	ma_quality_total += (quality_total - ma_quality_total) * last_update * detection_rate/2.0;
 	
-	ma_quality_avg -= 0.98*ma_quality_avg*last_update*2.0;
+	ma_quality_avg -= 0.98*ma_quality_avg*last_update*3.0;
 	
 	if (ma_quality_total <= 0) ma_quality_total = 1.0;
 	if (ma_quality_avg <= 0) ma_quality_avg = 1.0;
 	
 	float avg_bpm_offset = 0.0;
 	float offset_test_bpm = current_bpm;
-	draft.clear();
-	fract_draft.clear();
+	std::map<int,float> draft;
+	std::map<int,float> fract_draft;
 	
 	{
 		for (x=0; x<BD_DETECTION_RANGES; x++)
@@ -296,208 +302,132 @@ void BeatDetektor::process(float timer_seconds, std::vector<float> &fft_data)
 		
 		if (current_bpm && bpm_predict) current_bpm -= (current_bpm-bpm_predict)*last_update; //*avg_bpm_offset*200.0;	
 		if (current_bpm != current_bpm || current_bpm < 0) current_bpm = 0;
-	}
-}
-
-void BeatDetektorContest::process(float timer_seconds, BeatDetektor *bd)
-{	
-	if (last_timer == 0) 
-	{
-		last_timer = timer_seconds;
-		return;
-	}
-	
-	if (last_timer != timer_seconds)
-	{
-		last_update = timer_seconds - last_timer;
-		last_timer = timer_seconds;
-	}
-	
-	// hold a contest for bpm to find the current mode
-	std::map<int,float>::iterator contest_i;
-	
-	float contest_max=0;
-	
-	for (contest_i = bpm_contest.begin(); contest_i != bpm_contest.end(); contest_i++)
-	{
-		if (contest_max < (*contest_i).second) contest_max =(*contest_i).second; 
-		if (((*contest_i).second) > BD_FINISH_LINE/2.0)
-		{
-			bpm_contest_lo[round((float)((*contest_i).first)/10.0)]+= (((*contest_i).second)/10.0)*last_update;
-		}
-	}
-	
-	
-	// normalize to a finish line of BD_FINISH_LINE
-	if (contest_max > finish_line) 
-	{
+		
+		
+		// hold a contest for bpm to find the current mode
+		std::map<int,float>::iterator contest_i;
+		
+		float contest_max=0;
+		
 		for (contest_i = bpm_contest.begin(); contest_i != bpm_contest.end(); contest_i++)
 		{
-			(*contest_i).second=((*contest_i).second/contest_max)*finish_line;
+			if (contest_max < (*contest_i).second) contest_max =(*contest_i).second; 
+			if (((*contest_i).second) > BD_FINISH_LINE/2.0)
+			{
+				bpm_contest_lo[round((float)((*contest_i).first)/10.0)]+= (((*contest_i).second)/10.0)*last_update;
+			}
 		}
-	}
-	
-	contest_max = 0;
-	
-	for (contest_i = bpm_contest_lo.begin(); contest_i != bpm_contest_lo.end(); contest_i++)
-	{
-		if (contest_max < (*contest_i).second) contest_max =(*contest_i).second; 
-	}
-	
-	if (contest_max > finish_line) 
-	{
+		
+		
+		// normalize to a finish line of BD_FINISH_LINE
+		if (contest_max > finish_line) 
+		{
+			for (contest_i = bpm_contest.begin(); contest_i != bpm_contest.end(); contest_i++)
+			{
+				(*contest_i).second=((*contest_i).second/contest_max)*finish_line;
+			}
+		}
+		
+		contest_max = 0;
+		
 		for (contest_i = bpm_contest_lo.begin(); contest_i != bpm_contest_lo.end(); contest_i++)
 		{
-			(*contest_i).second=((*contest_i).second/contest_max)*finish_line;
+			if (contest_max < (*contest_i).second) contest_max =(*contest_i).second; 
 		}
-	}
-	
-	
-	if (!no_contest_decay)
-	{
+		
+		if (contest_max > finish_line) 
+		{
+			for (contest_i = bpm_contest_lo.begin(); contest_i != bpm_contest_lo.end(); contest_i++)
+			{
+				(*contest_i).second=((*contest_i).second/contest_max)*finish_line;
+			}
+		}
+		
+		
 		// decay contest values from last loop
 		for (contest_i = bpm_contest.begin(); contest_i != bpm_contest.end(); contest_i++)
 		{
-			(*contest_i).second-=(*contest_i).second*(last_update/bd->detection_rate);
+			(*contest_i).second-=(*contest_i).second*(last_update/detection_rate);
 		}
 		
 		// decay contest values from last loop
 		for (contest_i = bpm_contest_lo.begin(); contest_i != bpm_contest_lo.end(); contest_i++)
 		{
-			(*contest_i).second-=(*contest_i).second*(last_update/bd->detection_rate);
+			(*contest_i).second-=(*contest_i).second*(last_update/detection_rate);
 		}
-	}
 		
-	// award the winner of this iteration
-	if (bd->current_bpm)
-	{
-		int ival = (int)round((60.0/bd->current_bpm)*10.0);
-//		if (bd->draft.end() != bd->draft.find(ival))
-//		{
-//			bpm_contest[ival] += bd->draft[ival]*last_update;	
-//		}
-		bpm_contest[ival] += bd->quality_reward*last_update;
-		has_current_bpm = true;
-	}
-	
-}
-
-void BeatDetektorContest::run()
-{
-	if (last_update == 0) return;
-	
-	int winner = 0;
-	int winner_lo = 0;				
-	std::map<int,float>::iterator contest_i;
-
-	bpm_timer+=last_update;
-	
-	// attempt to display the beat at the beat interval ;)
-	if (bpm_timer > winning_bpm/4.0 && has_current_bpm)
-	{		
-		if (winning_bpm) while (bpm_timer > winning_bpm/4.0) bpm_timer -= winning_bpm/4.0;
 		
-		// increment beat counter
+		bpm_timer+=last_update;
 		
-		quarter_counter++;		
-		half_counter= quarter_counter/2;
-		beat_counter = quarter_counter/4;
-				
-		win_val = 0;
+		int winner = 0;
+		int winner_lo = 0;				
 		
-		// find the overall winner so far
-		for (contest_i = bpm_contest.begin(); contest_i != bpm_contest.end(); contest_i++)
-		{
-			if (win_val < (*contest_i).second)
+		// attempt to display the beat at the beat interval ;)
+		if (bpm_timer > winning_bpm/4.0 && current_bpm)
+		{		
+			if (winning_bpm) while (bpm_timer > winning_bpm/4.0) bpm_timer -= winning_bpm/4.0;
+			
+			// increment beat counter
+			
+			quarter_counter++;		
+			half_counter= quarter_counter/2;
+			beat_counter = quarter_counter/4;
+			
+			// award the winner of this iteration
+			bpm_contest[(int)round((60.0/current_bpm)*10.0)]+=quality_reward;
+			
+			win_val = 0;
+			
+			// find the overall winner so far
+			for (contest_i = bpm_contest.begin(); contest_i != bpm_contest.end(); contest_i++)
 			{
-				winner = (*contest_i).first;
-				win_val = (*contest_i).second;
+				if (win_val < (*contest_i).second)
+				{
+					winner = (*contest_i).first;
+					win_val = (*contest_i).second;
+				}
 			}
-		}
-		
-		if (winner)
-		{
-			win_bpm_int = winner;
-			winning_bpm = 60.0/(float)(winner/10.0);
-		}
-		
-		
-		win_val_lo = 0;		
-		
-		// find the overall winner so far
-		for (contest_i = bpm_contest_lo.begin(); contest_i != bpm_contest_lo.end(); contest_i++)
-		{
-			if (win_val_lo < (*contest_i).second)
+			
+			if (winner)
 			{
-				winner_lo = (*contest_i).first;
-				win_val_lo = (*contest_i).second;
+				win_bpm_int = winner;
+				winning_bpm = 60.0/(float)(winner/10.0);
 			}
-		}
-		
-		if (winner_lo)
-		{
-			win_bpm_int_lo = winner_lo;
-			winning_bpm_lo = 60.0/(float)(winner_lo);
-		}
-
-/*
+			
+			
+			win_val_lo = 0;		
+			
+			// find the overall winner so far
+			for (contest_i = bpm_contest_lo.begin(); contest_i != bpm_contest_lo.end(); contest_i++)
+			{
+				if (win_val_lo < (*contest_i).second)
+				{
+					winner_lo = (*contest_i).first;
+					win_val_lo = (*contest_i).second;
+				}
+			}
+			
+			if (winner_lo)
+			{
+				win_bpm_int_lo = winner_lo;
+				winning_bpm_lo = 60.0/(float)(winner_lo);
+			}
 #if DEVTEST_BUILD
-		if (debugmode && ((quarter_counter % 4) == 0)) 
-		{
-			printf("[%0.0f-%0.0f] quality: %0.2f / %0.2f percent",BPM_MIN,BPM_MAX,quality_total,(quality_total/(ma_quality_avg*(float)BD_DETECTION_RANGES))*50.0);
-			printf(", current bpm estimate: %d @ %0.2f / %0.5f",winner,win_val,bpm_offset);
-			printf("  low res estimate: %d @ %0.2f\n",winner_lo,win_val_lo);
-			std::map<int, int>::iterator contrib_i;
-			
-			printf("contrib: ");
-			for (contrib_i = contribution_counter.begin(); contrib_i !=  contribution_counter.end(); contrib_i++)
+            if (debugmode && ((quarter_counter % 4) == 0))
 			{
-				printf("%d: %d \t",(*contrib_i).first,(*contrib_i).second);
+				printf("[%0.0f-%0.0f] quality: %0.2f / %0.2f percent",BPM_MIN,BPM_MAX,quality_total,(quality_total/(ma_quality_avg*(float)BD_DETECTION_RANGES))*50.0);
+				printf(", current bpm estimate: %d @ %0.2f / %0.5f",winner,win_val,bpm_offset);
+				printf("  low res estimate: %d @ %0.2f\n",winner_lo,win_val_lo);
+				std::map<int, int>::iterator contrib_i;
+				
+				printf("contrib: ");
+				for (contrib_i = contribution_counter.begin(); contrib_i !=  contribution_counter.end(); contrib_i++)
+				{
+					printf("%d: %d \t",(*contrib_i).first,(*contrib_i).second);
+				}
+				printf("\n");
 			}
-			printf("\n");
-		}
 #endif
- */
-		
-	}		
-}
-
-void BeatDetektorVU::process(BeatDetektor *detector, float current_bpm)
-{
-	float det_max = 0.0;
-	
-	current_bpm = 60.0/current_bpm;
-
-	for (int i = 0; i < BD_DETECTION_RANGES; i++)
-	{
-		float det_val = (detector->ma_freq_range[i]/detector->maa_freq_range[i]);	
-		if (det_val > det_max) det_max = det_val;
-	}		
-	
-	if (det_max <= 0) det_max = 1.0;
-	
-	for (int i = 0; i < BD_DETECTION_RANGES; i++)
-	{
-		bool det = 1;
-		
-		float det_val = (detector->ma_freq_range[i]/detector->maa_freq_range[i]);
-		
-		if (det_val != det_val) det_val = 0;
-		
-		if (det && det_val>1.0)
-		{
-			det_val -= 1.0;
-			
-			if (det_val > vu_levels[i]) 
-				vu_levels[i] = det_val;
-			else if (current_bpm) vu_levels[i] -= (vu_levels[i]-det_val)*detector->last_update*(1.0/current_bpm)*3.0;
 		}
-		else 
-		{
-			if (current_bpm) vu_levels[i] -= (detector->last_update/current_bpm)*2.0;
-		}
-		
-		if (vu_levels[i] < 0 || vu_levels[i] != vu_levels[i]) vu_levels[i] = 0;
 	}
-	
 }

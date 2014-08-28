@@ -4,6 +4,7 @@
  */
 
 #pragma once
+#include <math.h>
 
 template<unsigned M, unsigned N, unsigned B, unsigned A>
 struct SinCosSeries {

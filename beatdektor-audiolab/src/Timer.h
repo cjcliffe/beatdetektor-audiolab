@@ -24,9 +24,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#ifndef _WIN32
 #include <sys/time.h>
-#endif
 
 /// Timer Class, high resolution timer
 /**
@@ -46,10 +44,8 @@ private:
 	unsigned long paused_time;
 	unsigned long offset;
 
-#ifndef _WIN32
 	struct timeval time_val;
 	struct timezone time_zone;                                                                                            
-#endif
 
 
 	bool paused_state;
